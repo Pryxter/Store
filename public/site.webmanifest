@@ -1,0 +1,21 @@
+{
+  "name": "Inventario de Tienda",
+  "short_name": "Inventario",
+  "icons": [
+    {
+      "src": "/android-chrome-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "theme_color": "#10241d",
+  "background_color": "#f5f7f2",
+  "display": "standalone"
+}
