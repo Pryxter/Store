@@ -1,0 +1,48 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function profile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function role() {
+      return profile().role;
+    }
+
+    function isOwner() {
+      return signedIn() && role() == "Dueño";
+    }
+
+    function canManageInventory() {
+      return signedIn() && role() in ["Dueño", "Socio", "Encargados"];
+    }
+
+    match /users/{userId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isOwner();
+    }
+
+    match /products/{productId} {
+      allow read: if signedIn();
+      allow create, update: if canManageInventory();
+      allow delete: if isOwner();
+    }
+
+    match /sales/{saleId} {
+      allow read: if signedIn();
+      allow create: if signedIn();
+      allow update, delete: if isOwner();
+    }
+
+    match /auditLogs/{logId} {
+      allow read: if isOwner();
+      allow create: if signedIn();
+      allow update, delete: if false;
+    }
+  }
+}
